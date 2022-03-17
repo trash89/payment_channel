@@ -60,7 +60,7 @@ The deploy.py log in the hardhat console is very big, I included a text log wher
 ![Deployment from brownie](deploy.py.log)
 
 A screenshot from the hardhat console:
-![Deployment from brownie](deploy.py.console.png)
+![Console.log of deploy.py](deploy.py.console.png)
 
 And from brownie:
 ![In hardhat console](deploy.py.png)
