@@ -1,9 +1,36 @@
+project_structure:
+  build: build/brownie
+  contracts: contracts
+  interfaces: interfaces
+  reports: reports
+  scripts: scripts
+  tests: tests
 dependencies:
-  - OpenZeppelin/openzeppelin-contracts@4.5.0
+  - smartcontractkit/chainlink-brownie-contracts@0.4.1
+  - OpenZeppelin/openzeppelin-contracts@4.6.0
 compiler:
   solc:
     remappings:
-      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.5.0"
+      - "@chainlink=smartcontractkit/chainlink-brownie-contracts@0.4.1"
+      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.6.0"
+networks:
+  default: development
+  kovan:
+    verify: False
+    update_frontend: True
+    numConfirmations: 1
+  rinkeby:
+    verify: False
+    update_frontend: True
+    numConfirmations: 1
+  hh-local:
+    verify: False
+    update_frontend: True
+    numConfirmations: 1
+  hardhat:
+    verify: False
+    update_frontend: True
+    numConfirmations: 1
 dotenv: .env
 wallets:
   alice_key: ${ALICE_KEY}
