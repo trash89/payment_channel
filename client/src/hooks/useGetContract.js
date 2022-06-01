@@ -3,8 +3,7 @@ import { constants, utils } from "ethers";
 
 import networkMapping from "../chain-info/map.json";
 
-import contract1 from "../chain-info/SimpleAuction.json";
-import contract2 from "../chain-info/BlindAuction.json";
+import contract1 from "../chain-info/SimplePaymentChannel.json";
 
 const useGetContract = (contractName) => {
   const { activeChain } = useNetwork();
@@ -19,20 +18,13 @@ const useGetContract = (contractName) => {
   }
 
   const { abi: abiContract1 } = contract1;
-  const { abi: abiContract2 } = contract2;
 
   const formattedAddress = utils.getAddress(contractAddress);
 
-  if (contractName === "SimpleAuction") {
+  if (contractName === "SimplePaymentChannel") {
     return {
       address: activeChain ? formattedAddress : constants.AddressZero,
       ABI: abiContract1,
-    };
-  }
-  if (contractName === "BlindAuction") {
-    return {
-      address: activeChain ? formattedAddress : constants.AddressZero,
-      ABI: abiContract2,
     };
   }
 

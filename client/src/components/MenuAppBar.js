@@ -29,21 +29,14 @@ const MenuAppBar = () => {
           </NavLink>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Auction
+            Payment Channels
           </Typography>
           <NavLink
             style={{ flexGrow: 1 }}
-            to="/simpleauction"
+            to="/simplepc"
             className={({ isActive }) => (isActive ? "link active" : "link")}
           >
-            Simple Auction
-          </NavLink>
-          <NavLink
-            style={{ flexGrow: 1 }}
-            to="/blindauction"
-            className={({ isActive }) => (isActive ? "link active" : "link")}
-          >
-            Blind Auction
+            Simple
           </NavLink>
 
           <ConnectButton

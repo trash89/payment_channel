@@ -24,15 +24,13 @@ import { publicProvider } from "wagmi/providers/public";
 //   );
 
 const { provider, chains } = configureChains(
-  [
-    //chain.hardhat,
-    chain.rinkeby,
-  ],
+  [chain.hardhat, chain.rinkeby],
   [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "Auction Ethereum App, with Wagmi,Rainbowkit and Material-UI",
+  appName:
+    "Payment Channels Ethereum App, with Wagmi,Rainbowkit and Material-UI",
   chains,
 });
 

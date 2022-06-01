@@ -1,11 +1,5 @@
 import useIsMounted from "./useIsMounted";
-import useDetailsSimpleAuction from "./useDetailsSimpleAuction";
-import useDetailsBlindAuction from "./useDetailsBlindAuction";
+import useDetailsSimplePC from "./useDetailsSimplePC";
 import useGetContract from "./useGetContract";
 
-export {
-  useIsMounted,
-  useGetContract,
-  useDetailsSimpleAuction,
-  useDetailsBlindAuction,
-};
+export { useIsMounted, useGetContract, useDetailsSimplePC };

@@ -1,10 +1,9 @@
 {
-  "4": {
-    "BlindAuction": [
-      "0xb1202f39421101Da607B7A1aD0bA20dd3EE56445"
-    ],
-    "SimpleAuction": [
-      "0x719922dA5B813EC7F2E4F65Dc8f3666bD3788B3F"
+  "31337": {
+    "SimplePaymentChannel": [
+      "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d",
+      "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE",
+      "0x5FbDB2315678afecb367f032d93F642f64180aa3"
     ]
   }
 }

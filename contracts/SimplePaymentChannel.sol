@@ -13,16 +13,6 @@ contract SimplePaymentChannel {
         expiration = block.timestamp + duration;
     }
 
-    /// the recipient can close the channel at any time by presenting a
-    /// signed amount from the sender. the recipient will be sent that amount,
-    /// and the remainder will go back to the sender
-    function close(uint256 amount, bytes memory signature) external {
-        require(msg.sender == recipient);
-        require(isValidSignature(amount, signature));
-        recipient.transfer(amount);
-        selfdestruct(sender);
-    }
-
     /// the sender can extend the expiration at any time
     function extend(uint256 newExpiration) external {
         require(msg.sender == sender);
@@ -38,6 +28,22 @@ contract SimplePaymentChannel {
         selfdestruct(sender);
     }
 
+    function newChannel(address payable _recipientAddress, uint256 _expiration) external payable {
+        sender = payable(msg.sender);
+        recipient = _recipientAddress;
+        expiration = _expiration;
+    }
+
+    /// the recipient can close the channel at any time by presenting a
+    /// signed amount from the sender. the recipient will be sent that amount,
+    /// and the remainder will go back to the sender
+    function close(uint256 amount, bytes memory signature) external {
+        require(msg.sender == recipient,"not recipient");
+        require(isValidSignature(amount, signature),"invalid signature");
+        recipient.transfer(amount);
+        selfdestruct(sender);
+    }
+
     function isValidSignature(uint256 amount, bytes memory signature)
         internal
         view
@@ -46,6 +52,16 @@ contract SimplePaymentChannel {
         bytes32 message = prefixed(keccak256(abi.encodePacked(this, amount)));
         // check that the signature is from the payment sender
         return recoverSigner(message, signature) == sender;
+    }
+
+    function recoverSigner(bytes32 message, bytes memory sig)
+        internal
+        view
+        returns (address)
+    {
+        (uint8 v, bytes32 r, bytes32 s) = splitSignature(sig);
+        console.log("Address is %s", ecrecover(message, v, r, s));
+        return ecrecover(message, v, r, s);
     }
 
     /// All functions below this are just taken from the chapter
@@ -72,15 +88,6 @@ contract SimplePaymentChannel {
         return (v, r, s);
     }
 
-    function recoverSigner(bytes32 message, bytes memory sig)
-        internal
-        view
-        returns (address)
-    {
-        (uint8 v, bytes32 r, bytes32 s) = splitSignature(sig);
-        console.log("Address is %s", ecrecover(message, v, r, s));
-        return ecrecover(message, v, r, s);
-    }
 
     /// builds a prefixed hash to mimic the behavior of eth_sign.
     function prefixed(bytes32 hash) internal pure returns (bytes32) {
