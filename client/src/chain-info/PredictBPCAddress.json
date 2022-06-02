@@ -161,19 +161,19 @@
         580
       ],
       "ECDSA": [
-        10598
+        10600
       ],
       "PredictBPCAddress": [
         1507
       ],
       "SafeMath": [
-        10910
+        10912
       ],
       "Strings": [
-        11153
+        11155
       ],
       "console": [
-        10191
+        10193
       ]
     },
     "id": 1508,
@@ -197,7 +197,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 1508,
-        "sourceUnit": 10192,
+        "sourceUnit": 10194,
         "src": "57:23:6",
         "symbolAliases": [],
         "unitAlias": ""
@@ -269,10 +269,10 @@
                         "name": "console",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10191,
+                        "referencedDeclaration": 10193,
                         "src": "176:7:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_console_$10191_$",
+                          "typeIdentifier": "t_type$_t_contract$_console_$10193_$",
                           "typeString": "type(library console)"
                         }
                       },
@@ -283,7 +283,7 @@
                       "lValueRequested": false,
                       "memberName": "log",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2722,
+                      "referencedDeclaration": 2724,
                       "src": "176:11:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_string_memory_ptr_$returns$__$",
@@ -434,10 +434,10 @@
                         "name": "console",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10191,
+                        "referencedDeclaration": 10193,
                         "src": "279:7:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_console_$10191_$",
+                          "typeIdentifier": "t_type$_t_contract$_console_$10193_$",
                           "typeString": "type(library console)"
                         }
                       },
@@ -448,7 +448,7 @@
                       "lValueRequested": false,
                       "memberName": "log",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 3422,
+                      "referencedDeclaration": 3424,
                       "src": "279:11:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_string_memory_ptr_$_t_uint256_$_t_address_$returns$__$",
@@ -539,10 +539,10 @@
                         "name": "console",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10191,
+                        "referencedDeclaration": 10193,
                         "src": "804:7:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_console_$10191_$",
+                          "typeIdentifier": "t_type$_t_contract$_console_$10193_$",
                           "typeString": "type(library console)"
                         }
                       },
@@ -553,7 +553,7 @@
                       "lValueRequested": false,
                       "memberName": "log",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2722,
+                      "referencedDeclaration": 2724,
                       "src": "804:11:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_string_memory_ptr_$returns$__$",
@@ -644,10 +644,10 @@
                         "name": "console",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10191,
+                        "referencedDeclaration": 10193,
                         "src": "1953:7:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_console_$10191_$",
+                          "typeIdentifier": "t_type$_t_contract$_console_$10193_$",
                           "typeString": "type(library console)"
                         }
                       },
@@ -658,7 +658,7 @@
                       "lValueRequested": false,
                       "memberName": "log",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2722,
+                      "referencedDeclaration": 2724,
                       "src": "1953:11:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_string_memory_ptr_$returns$__$",
@@ -1160,10 +1160,10 @@
                         "name": "console",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10191,
+                        "referencedDeclaration": 10193,
                         "src": "2586:7:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_console_$10191_$",
+                          "typeIdentifier": "t_type$_t_contract$_console_$10193_$",
                           "typeString": "type(library console)"
                         }
                       },
@@ -1174,7 +1174,7 @@
                       "lValueRequested": false,
                       "memberName": "log",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2722,
+                      "referencedDeclaration": 2724,
                       "src": "2586:11:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_string_memory_ptr_$returns$__$",
@@ -1306,10 +1306,10 @@
                         "name": "console",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10191,
+                        "referencedDeclaration": 10193,
                         "src": "2644:7:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_console_$10191_$",
+                          "typeIdentifier": "t_type$_t_contract$_console_$10193_$",
                           "typeString": "type(library console)"
                         }
                       },
@@ -1320,7 +1320,7 @@
                       "lValueRequested": false,
                       "memberName": "log",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2835,
+                      "referencedDeclaration": 2837,
                       "src": "2644:11:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_string_memory_ptr_$_t_uint256_$returns$__$",
@@ -1378,10 +1378,10 @@
                         "name": "console",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10191,
+                        "referencedDeclaration": 10193,
                         "src": "2924:7:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_console_$10191_$",
+                          "typeIdentifier": "t_type$_t_contract$_console_$10193_$",
                           "typeString": "type(library console)"
                         }
                       },
@@ -1392,7 +1392,7 @@
                       "lValueRequested": false,
                       "memberName": "log",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2722,
+                      "referencedDeclaration": 2724,
                       "src": "2924:11:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_string_memory_ptr_$returns$__$",
@@ -1446,10 +1446,10 @@
                         "name": "console",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10191,
+                        "referencedDeclaration": 10193,
                         "src": "2956:7:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_console_$10191_$",
+                          "typeIdentifier": "t_type$_t_contract$_console_$10193_$",
                           "typeString": "type(library console)"
                         }
                       },
@@ -1460,7 +1460,7 @@
                       "lValueRequested": false,
                       "memberName": "logBytes32",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2694,
+                      "referencedDeclaration": 2696,
                       "src": "2956:18:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_bytes32_$returns$__$",
@@ -1534,10 +1534,10 @@
                         "name": "console",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10191,
+                        "referencedDeclaration": 10193,
                         "src": "2991:7:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_console_$10191_$",
+                          "typeIdentifier": "t_type$_t_contract$_console_$10193_$",
                           "typeString": "type(library console)"
                         }
                       },
@@ -1548,7 +1548,7 @@
                       "lValueRequested": false,
                       "memberName": "log",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2835,
+                      "referencedDeclaration": 2837,
                       "src": "2991:11:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_string_memory_ptr_$_t_uint256_$returns$__$",
@@ -2108,10 +2108,10 @@
                         "name": "console",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10191,
+                        "referencedDeclaration": 10193,
                         "src": "3558:7:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_console_$10191_$",
+                          "typeIdentifier": "t_type$_t_contract$_console_$10193_$",
                           "typeString": "type(library console)"
                         }
                       },
@@ -2122,7 +2122,7 @@
                       "lValueRequested": false,
                       "memberName": "log",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2722,
+                      "referencedDeclaration": 2724,
                       "src": "3558:11:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_string_memory_ptr_$returns$__$",
@@ -2788,10 +2788,10 @@
                         "name": "console",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10191,
+                        "referencedDeclaration": 10193,
                         "src": "4752:7:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_console_$10191_$",
+                          "typeIdentifier": "t_type$_t_contract$_console_$10193_$",
                           "typeString": "type(library console)"
                         }
                       },
@@ -2802,7 +2802,7 @@
                       "lValueRequested": false,
                       "memberName": "log",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2722,
+                      "referencedDeclaration": 2724,
                       "src": "4752:11:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_string_memory_ptr_$returns$__$",

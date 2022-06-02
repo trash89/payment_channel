@@ -120,6 +120,7 @@ const GetSimplePC = ({
   }, [statusNewChannel, statusNewChannelWait, statusClose, statusCloseWait]);
 
   if (signedMessage) console.log("SignedMessage=", signedMessage);
+
   const handleCloseDialog = (event, reason) => {
     if (
       (reason && (reason === "backdropClick" || reason === "escapeKeyDown")) ||
@@ -146,14 +147,21 @@ const GetSimplePC = ({
             ["address", "uint256"],
             [contractAddress, newValueFormatted]
           );
-          const msghex = utils.keccak256(utils.hashMessage(msg));
-          signMessage({ message: msghex });
-
+          console.log(
+            "address=",
+            contractAddress,
+            "value=",
+            newValueFormatted,
+            "msg=",
+            msg
+          );
+          console.log("msgHash=", utils.hashMessage(msg));
+          const msgHash = utils.hashMessage(msg);
+          signMessage({ message: msgHash });
           writeNewChannel({
             args: [newRecipientFormatted, localNewExpiration],
             overrides: { value: utils.parseEther(newValue) },
           });
-          //console.log(utils.verifyMessage(msghex, signedMessage));
           setOpenDialog(false);
         }
       }
