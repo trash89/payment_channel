@@ -46,9 +46,16 @@ export const addressNotZero = (address) => {
 };
 
 export const getNumConfirmations = (activeChain) => {
+  let numConf = 1;
   if (activeChain) {
-    return brownieConfigJson["networks"][activeChain["network"]][
-      "numConfirmations"
-    ];
-  } else return 1;
+    try {
+      numConf =
+        brownieConfigJson["networks"][activeChain["network"]][
+          "numConfirmations"
+        ];
+    } catch (error) {
+      numConf = 1;
+    }
+  }
+  return numConf;
 };

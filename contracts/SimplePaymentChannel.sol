@@ -38,7 +38,7 @@ contract SimplePaymentChannel {
     /// signed amount from the sender. the recipient will be sent that amount,
     /// and the remainder will go back to the sender
     function close(uint256 amount, bytes memory signature) external {
-        console.log("signature=, amount=%d",amount);
+        console.log("signature received from frontend=");
         console.logBytes(signature);
         require(msg.sender == recipient,"not recipient");
         require(isValidSignature(amount, signature),"invalid signature");
@@ -51,13 +51,10 @@ contract SimplePaymentChannel {
         view
         returns (bool)
     {
-        console.log("Address=%s,amount=%d",address(this),amount);
-        console.log("message =");
-        console.logBytes32(keccak256(abi.encodePacked(address(this), amount)));
-        console.log("message prefixed=");
-        console.logBytes32(prefixed(keccak256(abi.encodePacked(address(this), amount))));
 
         bytes32 message = prefixed(keccak256(abi.encodePacked(address(this), amount)));
+        console.log("message =");
+        console.logBytes32(message);
         // check that the signature is from the payment sender
         return recoverSigner(message, signature) == sender;
     }
@@ -99,8 +96,6 @@ contract SimplePaymentChannel {
 
     /// builds a prefixed hash to mimic the behavior of eth_sign.
     function prefixed(bytes32 hash) internal view returns (bytes32) {
-        console.log("prefixed encodeP=");
-        console.logBytes(abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
         return
             keccak256(
                 abi.encodePacked("\x19Ethereum Signed Message:\n32", hash)

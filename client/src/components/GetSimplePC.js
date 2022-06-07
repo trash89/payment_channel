@@ -10,15 +10,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import { BigNumber, utils } from "ethers";
-import {
-  addressNotZero,
-  formatBalance,
-  shortenAddress,
-  getNumConfirmations,
-} from "../utils/utils";
+import { addressNotZero, formatBalance, shortenAddress } from "../utils/utils";
 
-import { useContractWrite, useWaitForTransaction, useSignMessage } from "wagmi";
-import { useIsMounted, useDetailsSimplePC } from "../hooks";
+import { useSignMessage, useSigner } from "wagmi";
+import { useIsMounted, useDetailsSimplePC, useGetFuncWrite } from "../hooks";
 import { GetStatusIcon, ShowError } from ".";
 
 const GetSimplePC = ({
@@ -32,20 +27,29 @@ const GetSimplePC = ({
   const isEnabled = Boolean(
     isMounted && activeChain && account && addressNotZero(contractAddress)
   );
-  const numConfirmations = getNumConfirmations(activeChain);
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialogClose, setOpenDialogClose] = useState(false);
-  const [amount, setAmount] = useState("0");
-  const [signature, setSignature] = useState("");
-  const [newValue, setNewValue] = useState("0");
-  const [newRecipient, setNewRecipient] = useState("");
-  const [newExpiration, setNewExpiration] = useState("");
+  const [input, setInput] = useState({
+    amount: "0",
+    signature: "",
+    newValue: "0",
+    newRecipient: "",
+    newExpiration: "",
+  });
+  const [isErrorInput, setIsErrorInput] = useState({
+    amount: false,
+    signature: false,
+    newValue: false,
+    newRecipient: false,
+    newExpiration: false,
+  });
+
   const { sender, expiration, recipient, balance } = useDetailsSimplePC(
     activeChain,
     contractAddress,
     contractABI
   );
-
+  const { data: signer, isError, isLoading } = useSigner();
   const {
     data: signedMessage,
     isError: isErrorSignedMessage,
@@ -55,53 +59,35 @@ const GetSimplePC = ({
     signMessage,
   } = useSignMessage();
 
+  // newChannel function
   const {
-    data: dataNewChannel,
     error: errorNewChannel,
     isError: isErrorNewChannel,
-    isLoading: isLoadingNewChannel,
     write: writeNewChannel,
     status: statusNewChannel,
-  } = useContractWrite(
-    {
-      addressOrName: contractAddress,
-      contractInterface: contractABI,
-    },
+    statusWait: statusNewChannelWait,
+  } = useGetFuncWrite(
     "newChannel",
-    {
-      enabled: isEnabled,
-    }
+    activeChain,
+    contractAddress,
+    contractABI,
+    isEnabled
   );
-  const { status: statusNewChannelWait } = useWaitForTransaction({
-    hash: dataNewChannel?.hash,
-    wait: dataNewChannel?.wait,
-    confirmations: numConfirmations,
-    enabled: isEnabled,
-  });
 
+  // close function
   const {
-    data: dataClose,
     error: errorClose,
     isError: isErrorClose,
-    isLoading: isLoadingClose,
     write: writeClose,
     status: statusClose,
-  } = useContractWrite(
-    {
-      addressOrName: contractAddress,
-      contractInterface: contractABI,
-    },
+    statusWait: statusCloseWait,
+  } = useGetFuncWrite(
     "close",
-    {
-      enabled: isEnabled,
-    }
+    activeChain,
+    contractAddress,
+    contractABI,
+    isEnabled
   );
-  const { status: statusCloseWait } = useWaitForTransaction({
-    hash: dataClose?.hash,
-    wait: dataClose?.wait,
-    confirmations: numConfirmations,
-    enabled: isEnabled,
-  });
 
   useEffect(() => {
     if (
@@ -111,59 +97,87 @@ const GetSimplePC = ({
       statusCloseWait !== "loading"
     ) {
       if (disabled) setDisabled(false);
-      setNewValue("0");
-      setNewRecipient("");
-      setNewExpiration("");
-      setAmount("");
+      setInput({
+        amount: "0",
+        signature: "",
+        newValue: "0",
+        newRecipient: "",
+        newExpiration: "",
+      });
     }
     // eslint-disable-next-line
   }, [statusNewChannel, statusNewChannelWait, statusClose, statusCloseWait]);
 
   if (signedMessage) console.log("SignedMessage=", signedMessage);
 
-  const handleCloseDialog = (event, reason) => {
+  const handleCloseDialog = async (event, reason) => {
     if (
       (reason && (reason === "backdropClick" || reason === "escapeKeyDown")) ||
       event.target.value === "cancel"
     ) {
       setOpenDialog(false);
-      setNewRecipient("");
-      setNewExpiration("");
+      setInput({ ...input, newRecipient: "", newExpiration: "" });
     } else {
       if (
-        newRecipient &&
-        utils.isAddress(newRecipient) &&
-        newValue &&
-        utils.parseEther(newValue) > 0
+        input.newRecipient &&
+        input.newRecipient !== "" &&
+        utils.isAddress(input.newRecipient)
       ) {
-        const newRecipientFormatted = utils.getAddress(newRecipient);
-        const newValueFormatted = utils.parseEther(newValue);
-        const currentDate = new Date();
-        const localDate = new Date(newExpiration);
-        if (localDate > currentDate) {
-          const localNewExpiration = BigNumber.from(localDate.getTime() / 1000);
-          setDisabled(true);
-          const msg = utils.solidityKeccak256(
-            ["address", "uint256"],
-            [contractAddress, newValueFormatted]
-          );
-          console.log(
-            "address=",
-            contractAddress,
-            "value=",
-            newValueFormatted,
-            "msg=",
-            msg
-          );
-          console.log("msgHash=", utils.hashMessage(msg));
-          const msgHash = utils.hashMessage(msg);
-          signMessage({ message: msgHash });
-          writeNewChannel({
-            args: [newRecipientFormatted, localNewExpiration],
-            overrides: { value: utils.parseEther(newValue) },
-          });
-          setOpenDialog(false);
+        if (input.newValue && utils.parseEther(input.newValue) > 0) {
+          if (input.newExpiration && input.newExpiration !== "") {
+            try {
+              const localDate = new Date(input.newExpiration);
+              const newRecipientFormatted = utils.getAddress(
+                input.newRecipient
+              );
+              const newValueFormatted = utils.parseEther(input.newValue);
+              const currentDate = new Date();
+              if (localDate > currentDate) {
+                const localNewExpiration = BigNumber.from(
+                  localDate.getTime() / 1000
+                );
+
+                const msg = utils.solidityKeccak256(
+                  ["address", "uint256"],
+                  [contractAddress, newValueFormatted]
+                );
+                console.log("msg=", msg);
+
+                const msgHash = utils.keccak256(
+                  utils.solidityPack(
+                    ["string", "bytes32"],
+                    ["\x19Ethereum Signed Message:\n32", msg]
+                  )
+                );
+                console.log("msgHash=", msgHash);
+                //const msgHash = utils.hashMessage(msg);
+                setDisabled(true);
+                //signMessage({ message: msgHash });
+                const msgSigned = await signer.signMessage(msgHash);
+                console.log("msgSigned=", msgSigned);
+                console.log(
+                  "verifyMessage=",
+                  utils.verifyMessage(msgHash, msgSigned)
+                );
+
+                writeNewChannel({
+                  args: [newRecipientFormatted, localNewExpiration],
+                  overrides: { value: utils.parseEther(input.newValue) },
+                });
+                setOpenDialog(false);
+              }
+            } catch (error) {
+              console.log(error);
+              setIsErrorInput({ ...isErrorInput, newExpiration: true });
+            }
+          } else {
+            setIsErrorInput({ ...isErrorInput, newExpiration: true });
+          }
+        } else {
+          setIsErrorInput({ ...isErrorInput, newValue: true });
         }
+      } else {
+        setIsErrorInput({ ...isErrorInput, newRecipient: true });
       }
     }
   };
@@ -174,18 +188,53 @@ const GetSimplePC = ({
       event.target.value === "cancel"
     ) {
       setOpenDialogClose(false);
-      setAmount("0");
-      setSignature("");
+      setInput({ ...input, amount: "0", signature: "" });
     } else {
-      if (amount && utils.parseEther(amount) > 0) {
-        const amountFormatted = utils.parseEther(amount);
-        setDisabled(true);
-        writeClose({
-          args: [amountFormatted, signature],
-        });
-        setOpenDialogClose(false);
+      if (
+        input.amount &&
+        input.amount !== "0" &&
+        utils.parseEther(input.amount) > 0
+      ) {
+        if (input.signature && input.signature !== "") {
+          const amountFormatted = utils.parseEther(input.amount);
+          setDisabled(true);
+          writeClose({
+            args: [amountFormatted, input.signature],
+          });
+          setOpenDialogClose(false);
+        } else {
+          setIsErrorInput({ ...isErrorInput, signature: true });
+        }
+      } else {
+        setIsErrorInput({ ...isErrorInput, amount: true });
       }
     }
+  };
+
+  const handleNewRecipient = (e) => {
+    setInput({ ...input, newRecipient: e.target.value });
+    if (isErrorInput.newRecipient)
+      setIsErrorInput({ ...isErrorInput, newRecipient: false });
+  };
+  const handleNewExpiration = (e) => {
+    setInput({ ...input, newExpiration: e.target.value });
+    if (isErrorInput.newExpiration)
+      setIsErrorInput({ ...isErrorInput, newExpiration: false });
+  };
+  const handleNewValue = (e) => {
+    setInput({ ...input, newValue: e.target.value });
+    if (isErrorInput.newValue)
+      setIsErrorInput({ ...isErrorInput, newValue: false });
+  };
+  const handleAmount = (e) => {
+    setInput({ ...input, amount: e.target.value });
+    if (isErrorInput.amount)
+      setIsErrorInput({ ...isErrorInput, amount: false });
+  };
+  const handleSignature = (e) => {
+    setInput({ ...input, signature: e.target.value });
+    if (isErrorInput.signature)
+      setIsErrorInput({ ...isErrorInput, signature: false });
   };
 
   const currentDate = new Date();
@@ -225,7 +274,7 @@ const GetSimplePC = ({
         <Button
           variant="contained"
           size="small"
-          disabled={disabled || isLoadingNewChannel || isLoadingSignedMessage}
+          disabled={disabled}
           onClick={() => setOpenDialog(true)}
         >
           New Channel
@@ -234,38 +283,41 @@ const GetSimplePC = ({
           <DialogTitle>Create a new Simple Payment Channel</DialogTitle>
           <DialogContent>
             <TextField
+              error={isErrorInput.newRecipient}
               autoFocus
               size="small"
               margin="dense"
               id="recipient"
               helperText="Recipient address"
               type="text"
-              value={newRecipient}
-              onChange={(e) => setNewRecipient(e.target.value)}
+              value={input.newRecipient}
+              onChange={handleNewRecipient}
               fullWidth
               required
               variant="outlined"
             />
             <TextField
+              error={isErrorInput.newExpiration}
               size="small"
               margin="dense"
               id="expiration"
               helperText="Expiration"
               type="datetime-local"
-              value={newExpiration}
+              value={input.newExpiration}
               required
-              onChange={(e) => setNewExpiration(e.target.value)}
+              onChange={handleNewExpiration}
               variant="outlined"
             />
             <TextField
+              error={isErrorInput.newValue}
               size="small"
               margin="dense"
               id="newValue"
               helperText="Value (ETH)"
               type="number"
-              value={newValue}
+              value={input.newValue}
               required
-              onChange={(e) => setNewValue(e.target.value)}
+              onChange={handleNewValue}
               variant="outlined"
             />
           </DialogContent>
@@ -275,11 +327,8 @@ const GetSimplePC = ({
             </Button>
             <Button
               size="small"
-              disabled={
-                disabled || isLoadingNewChannel || isLoadingSignedMessage
-              }
+              disabled={disabled}
               onClick={handleCloseDialog}
-              endIcon={<GetStatusIcon status={statusNewChannel} />}
             >
               Create
             </Button>
@@ -297,25 +346,27 @@ const GetSimplePC = ({
           <DialogTitle>Close the Simple Payment Channel</DialogTitle>
           <DialogContent>
             <TextField
+              error={isErrorInput.amount}
               autoFocus
               size="small"
               margin="dense"
               id="amount"
               helperText="Amount (ETH)"
               type="number"
-              value={amount}
+              value={input.amount}
               required
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={handleAmount}
               variant="outlined"
             />
             <TextField
+              error={isErrorInput.signature}
               size="small"
               margin="dense"
               id="signature"
               helperText="Message Signature"
               type="text"
-              value={signature}
-              onChange={(e) => setSignature(e.target.value)}
+              value={input.signature}
+              onChange={handleSignature}
               fullWidth
               required
               variant="outlined"
@@ -331,9 +382,8 @@ const GetSimplePC = ({
             </Button>
             <Button
               size="small"
-              disabled={disabled || isLoadingClose}
+              disabled={disabled}
               onClick={handleCloseDialogClose}
-              endIcon={<GetStatusIcon status={statusClose} />}
             >
               Close
             </Button>
